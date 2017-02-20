@@ -1,0 +1,9 @@
+include 'iaproceso-subproceso-ws.war',
+		'iaproceso-subproceso-secure-ws.war',
+		'macroproceso-procesows-controller.jar',
+		'megaproceso3-macroproceso-proceso-backend.ear'
+
+project(':iaproceso-subproceso-ws.war').name='iaproceso-subproceso-ws'
+project(':iaproceso-subproceso-secure-ws.war').name='iaproceso-subproceso-secure-ws'
+project(':macroproceso-procesows-controller.jar').name='macroproceso-procesows-controller'
+project(':megaproceso3-macroproceso-proceso-backend.ear').name='megaproceso3-macroproceso-proceso-backend.ear'

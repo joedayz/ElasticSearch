@@ -1,0 +1,24 @@
+apply plugin: "jarConventions"
+
+
+dependencies{ 
+
+	compile project(':macroproceso-proceso-dao-imp')
+	compile project(':macroproceso-proceso-service-imp')	
+	testCompile 'javax:javaee-api:7.0' 
+	testCompile "junit:junit:${libraryVersions.junit}"
+	testCompile "org.jboss.arquillian.junit:arquillian-junit-container:${libraryVersions.arquillian}"
+	testCompile "org.jboss.arquillian.protocol:arquillian-protocol-servlet:${libraryVersions.arquillian}"
+	testCompile "org.jboss.arquillian.container:arquillian-wls-remote-12.1.2:${libraryVersions.weblogic}"
+	testCompile 'javax.activation:activation:1.1'
+	testCompile 'log4j:log4j:1.2.12'
+	
+
+}
+
+test {
+	testLogging {
+		events 'passed', 'skipped', 'failed'
+		exceptionFormat = 'full'
+	}
+}

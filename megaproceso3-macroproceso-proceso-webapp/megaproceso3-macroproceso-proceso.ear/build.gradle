@@ -1,0 +1,30 @@
+apply plugin: 'earApplicationConventions'
+
+evaluationDependsOn(':macroproceso-proceso-controller')
+evaluationDependsOn(':iaproceso-subproceso')
+evaluationDependsOn(':itproceso-subproceso')
+
+dependencies {
+	deploy project(':macroproceso-proceso-controller')
+	deploy project(path:':iaproceso-subproceso',configuration:"archives")
+	deploy project(path:':itproceso-subproceso',configuration:"archives")
+}
+
+import pe.gob.sunat.framework.build.ear.LibModule
+
+ear{
+	deploymentDescriptor {
+		webModule(project(':iaproceso-subproceso').war.archiveName,'/cl-at-iaproceso-subproceso')
+		webModule(project(':itproceso-subproceso').war.archiveName,'/cl-at-itproceso-subproceso')
+		module(new LibModule(project(":macroproceso-proceso-controller").jar.archiveName), "java")
+	}
+}
+
+task copyEar(dependsOn: ear) << {
+    println "Copiar ear de ${libsDir.getPath()} hacia /Users/josediaz/Projects/sunat/ears"
+    copy{
+      from libsDir
+      into "/Users/josediaz/Projects/sunat/ears"
+      include '*.ear'
+    }
+  }

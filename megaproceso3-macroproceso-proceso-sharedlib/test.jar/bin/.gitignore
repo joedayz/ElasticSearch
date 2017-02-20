@@ -1,0 +1,5 @@
+/arquillian.xml
+/pe/
+/test-beans.xml
+/test-persistence.xml
+/test-weblogic.xml

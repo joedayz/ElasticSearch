@@ -1,0 +1,44 @@
+apply plugin: "earSharedLibConventions"
+
+evaluationDependsOn(':macroproceso-proceso-model')
+evaluationDependsOn(':macroproceso-proceso-dao-ifz')
+evaluationDependsOn(':macroproceso-proceso-dao-imp')
+evaluationDependsOn(':macroproceso-proceso-service-ifz')
+evaluationDependsOn(':macroproceso-proceso-service-imp')
+
+
+dependencies {	
+	earlib 'org.elasticsearch:elasticsearch:1.7.1'	
+	earlib 'com.fasterxml.jackson.core:jackson-core:2.3.0'
+	earlib 'com.fasterxml.jackson.core:jackson-databind:2.3.0'	
+	earlib 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.3.0'	
+	earlib 'javax.activation:activation:1.1'	
+	earlib 'log4j:log4j:1.2.12'
+	deploy project(':macroproceso-proceso-model')
+	deploy project(':macroproceso-proceso-dao-ifz')
+	deploy project(':macroproceso-proceso-dao-imp')
+	deploy project(':macroproceso-proceso-service-ifz')
+	deploy project(':macroproceso-proceso-service-imp')
+}
+
+import pe.gob.sunat.framework.build.ear.LibModule
+
+ear{
+	deploymentDescriptor {
+		
+		module(new LibModule(project(':macroproceso-proceso-model').jar.archiveName), "java")
+		module(new LibModule(project(':macroproceso-proceso-dao-ifz').jar.archiveName), "java")
+		module(new LibModule(project(':macroproceso-proceso-dao-imp').jar.archiveName), "ejb")
+		module(new LibModule(project(':macroproceso-proceso-service-ifz').jar.archiveName), "java")
+		module(new LibModule(project(':macroproceso-proceso-service-imp').jar.archiveName), "ejb")
+	}
+}
+
+task copyEar(dependsOn: ear) << {
+    println "Copiar ear de ${libsDir.getPath()} hacia /Users/josediaz/Projects/sunat/ears  o D:\\ears"
+    copy{
+      from libsDir
+      into "/Users/josediaz/Projects/sunat/ears"
+      include '*.ear'
+    }
+  }

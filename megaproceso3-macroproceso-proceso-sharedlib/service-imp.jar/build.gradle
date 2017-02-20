@@ -1,0 +1,11 @@
+apply plugin: "jarConventions"
+
+
+dependencies{
+	compile 'org.elasticsearch:elasticsearch:1.7.1'
+	providedCompile 'javax:javaee-api:7.0' 
+	compile project(':macroproceso-proceso-model')
+	compile project(':macroproceso-proceso-dao-ifz')
+	compile project(':macroproceso-proceso-service-ifz')
+	
+}

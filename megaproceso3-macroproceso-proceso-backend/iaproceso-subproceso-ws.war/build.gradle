@@ -1,0 +1,18 @@
+apply plugin: 'warConventions'
+
+
+dependencies{
+	compile project(':macroproceso-procesows-controller')
+	compile 'org.elasticsearch:elasticsearch:1.7.1'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.3.0'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.0'	
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.3.0'	
+	providedCompile 'javax:javaee-api:7.0'
+	providedCompile 'javax.ws.rs:javax.ws.rs-api:2.0.1'		
+	providedCompile group: 'procesos.megaproceso3.macroproceso.megaproceso3-macroproceso-proceso-sharedlib', name: 'macroproceso-proceso-model', version: '1.0.0'
+	providedCompile group: 'procesos.megaproceso3.macroproceso.megaproceso3-macroproceso-proceso-sharedlib', name: 'macroproceso-proceso-service-ifz', version: '1.0.0'
+}
+
+
+
+

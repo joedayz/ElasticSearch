@@ -1,0 +1,15 @@
+include 'model.jar',
+		'dao-ifz.jar',
+		'dao-imp.jar',
+		'service-ifz.jar',
+		'service-imp.jar',
+		'test.jar',
+		'slb.ear'
+
+project(':test.jar').name='macroproceso-proceso-test'
+project(':model.jar').name='macroproceso-proceso-model'
+project(':dao-ifz.jar').name='macroproceso-proceso-dao-ifz'
+project(':dao-imp.jar').name='macroproceso-proceso-dao-imp'
+project(':service-ifz.jar').name='macroproceso-proceso-service-ifz'
+project(':service-imp.jar').name='macroproceso-proceso-service-imp'
+project(':slb.ear').name='megaproceso3-macroproceso-proceso-sharedlib.ear'

@@ -1,0 +1,60 @@
+buildscript{
+	repositories {
+		maven {
+			url "$artifactoryUrl/plugins-release"
+		}
+	}
+	
+	dependencies {
+		classpath(group: 'procesos.gestion.configuracion', name: 'build-gradle', version: '1.9.15')
+		
+
+	}
+}
+
+apply plugin: "parentConventions"
+
+
+subprojects {subproject->
+	group = "procesos.megaproceso3.macroproceso.megaproceso3-macroproceso-proceso-sharedlib"
+	version = '1.0.0' 
+	
+	ext.libraryVersions = [
+		javaee                  : '7.0',
+		weblogic                : '1.0.0.Alpha3',
+		junit                   : '4.12',
+		arquillian              : '1.1.5.Final',
+		shrinkWrapResolverGradle: '2.1.1'
+	]
+	
+	
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url 'http://repository.jboss.org/nexus/content/groups/public' }
+		maven { url 'http://repository.jboss.org/nexus/content/repositories/deprecated' }
+		maven { url 'http://repo.jfrog.org/artifactory/repo' }
+	}
+	
+	apply plugin:'java'
+	apply plugin: 'maven'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
+	uploadArchives { 
+		repositories {
+			mavenDeployer {
+				repository(url: "file:/Usuarios/josediaz/.m2/repository/")
+			}
+		}
+				
+	}	
+	
+
+}
+
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.12'
+}

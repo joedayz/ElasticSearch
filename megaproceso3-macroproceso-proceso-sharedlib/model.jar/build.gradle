@@ -1,0 +1,10 @@
+apply plugin: "jarConventions"
+
+
+dependencies{
+	compile 'org.elasticsearch:elasticsearch:1.7.1'	
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.3.0'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.0'
+	providedCompile 'javax:javaee-api:7.0'
+
+}

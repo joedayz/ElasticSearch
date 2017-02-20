@@ -1,0 +1,18 @@
+apply plugin: 'warConventions'
+
+
+dependencies{
+	compile project(':macroproceso-procesows-controller')
+	providedCompile 'javax:javaee-api:7.0'
+	providedCompile 'javax.ws.rs:javax.ws.rs-api:2.0.1'		
+	compile('org.tuckey:urlrewritefilter:3.0.4') {
+  		exclude group: 'javax.servlet', module: 'servlet-api' //by both name and group
+ 	}
+	compile group: 'com.auth0', name: 'java-jwt', version:'2.1.0'
+	compile('commons-codec:commons-codec:1.4') {
+  		exclude group: 'commons-logging', module: 'commons-logging' //by both name and group
+ 	}	
+ 	compile group: 'org.ebaysf.web', name: 'cors-filter', version:'1.0.0'
+	providedCompile group: 'procesos.megaproceso3.macroproceso.megaproceso3-macroproceso-proceso-sharedlib', name: 'macroproceso-proceso-model', version: '1.0.0'
+	providedCompile group: 'procesos.megaproceso3.macroproceso.megaproceso3-macroproceso-proceso-sharedlib', name: 'macroproceso-proceso-service-ifz', version: '1.0.0'
+}

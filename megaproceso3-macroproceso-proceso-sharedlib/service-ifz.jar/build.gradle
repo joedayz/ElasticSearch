@@ -1,0 +1,9 @@
+apply plugin: "jarConventions"
+
+
+dependencies{
+	
+	providedCompile 'javax:javaee-api:7.0' 
+	compile project(':macroproceso-proceso-model')
+	compile project(':macroproceso-proceso-dao-ifz')
+}
