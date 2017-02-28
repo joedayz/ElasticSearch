@@ -21,7 +21,6 @@ public class RestConfiguration extends Application {
 
 	private Set<Class<?>> getRestClasses() {
 		Set<Class<?>> resources = new java.util.HashSet<Class<?>>();
-		resources.add(PersonServiceRest.class);
 		resources.add(ElasticServiceRest.class);
 		resources.add(RESTCorsDemoRequestFilter.class);
 		resources.add(RESTCorsDemoResponseFilter.class);

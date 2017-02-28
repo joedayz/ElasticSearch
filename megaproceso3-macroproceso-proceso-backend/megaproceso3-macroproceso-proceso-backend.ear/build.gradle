@@ -2,12 +2,11 @@ apply plugin: 'earApplicationConventions'
 
 evaluationDependsOn(':macroproceso-procesows-controller')
 evaluationDependsOn(':iaproceso-subproceso-ws')
-evaluationDependsOn(':iaproceso-subproceso-secure-ws')
+
 
 dependencies {
 	deploy project(':macroproceso-procesows-controller')
 	deploy project(path:':iaproceso-subproceso-ws',configuration:"archives")
-	deploy project(path:':iaproceso-subproceso-secure-ws',configuration:"archives")
 }
 
 import pe.gob.sunat.framework.build.ear.LibModule
@@ -17,7 +16,6 @@ ear{
 	deploymentDescriptor {
 		libraryDirectory 'lib'
 		webModule(project(':iaproceso-subproceso-ws').war.archiveName,'/cl-at-iaproceso-subproceso-ws')		
-		webModule(project(':iaproceso-subproceso-secure-ws').war.archiveName,'/cl-at-iaproceso-subproceso-secure-ws')		
 		module(new LibModule(project(":macroproceso-procesows-controller").jar.archiveName), "java")
 		
 

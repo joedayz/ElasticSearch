@@ -30,7 +30,8 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 import pe.gob.sunat.megaproceso3.macroproceso.proceso.bean.DataResponseWrap;
 import pe.gob.sunat.megaproceso3.macroproceso.proceso.model.SHPRBean;
-import pe.gob.sunat.megaproceso3.macroproceso.proceso.service.BeanService;
+import pe.gob.sunat.megaproceso3.macroproceso.proceso.model.SIVEPDatoBean;
+import pe.gob.sunat.megaproceso3.macroproceso.proceso.service.RegistroPaginadoService;
 
 @Path("data")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -38,20 +39,29 @@ import pe.gob.sunat.megaproceso3.macroproceso.proceso.service.BeanService;
 public class ElasticServiceRest {
 
 	@Inject
-	private BeanService beanService;
+	private RegistroPaginadoService beanService;
 
+	
+	/**
+	 * Metodo que hace la busqueda realizada por el usuario.
+	 * @param text texto a buscar
+	 * @param numberPage numero de pagina actual
+	 * @param start Donde va a empezar la lista devuelta
+	 * @param finish es el final de los registros de la lista devuelta.
+	 * @return DataResponseWrap
+	 */
+	
 	@GET
 	@Path("speechBeanList")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DataResponseWrap sivepBeanSearch(@Context HttpServletRequest request, @QueryParam("text") String text,
-			@QueryParam("page") String numberPage, @QueryParam("start") Integer start,
+	public DataResponseWrap sivepBeanBusqueda(@Context HttpServletRequest request, @QueryParam("text") String text,
+			@QueryParam("totalrecords") String totalRecord, @QueryParam("start") Integer start,
 			@QueryParam("finish") Integer finish) {
 
+		
 		try {
-			List<SHPRBean> listaBean = beanService.searchBByQuery(text, start, finish);
-			Long listaBeanCount = beanService.countQuery(text);
-
-			DataResponseWrap dataResponseWrap = new DataResponseWrap(request, listaBean, listaBeanCount);
+			DataResponseWrap dataResponseWrap = beanService.busquedaBeanQueryPaginado(request, text, start, finish,
+					totalRecord);
 
 			return dataResponseWrap;
 		} catch (Exception e) {
@@ -60,51 +70,84 @@ public class ElasticServiceRest {
 		return null;
 	}
 
+	
+	/**
+	 * Metodo para exportar la busqueda que ha sido hecha por el usuario .
+	 * @param text .- texto a buscar en el elasticsearch.
+	 * @param response .- reponse para inserta el csv file
+	 * @return return csv
+	 * @throws Exception
+	 */
 	@GET
 	@Path("/downloadCSV")
 	@Produces("application/csv")
 	public Response downloadCSFile(@QueryParam("text") String text) throws Exception {
 
-		List<SHPRBean> listaBean = beanService.searchBByQuery(text);
+		List<SIVEPDatoBean> listaBean = beanService.busquedaBeanQuery(text);
 
 		ResponseBuilder response = getCSVExport(listaBean);
-		
+
 		return response.build();
 
 	}
 
 	
+	/**
+	 * Metodo que exporta los registros que han sido seleccionados por el usuario
+	 * @param text texto a buscar
+	 * @param response para inserta el archivo csv
+	 * @param selectedList lista devuelta en la busqueda
+	 * @return
+	 * @throws Exception
+	 */
 	@GET
 	@Path("/selectedToExportCSV")
 	@Produces("application/csv")
-	public Response selectedToExportCSV(@QueryParam("text") String text, @QueryParam("seleccionados") String selectedList) throws Exception {
+	public Response selectedToExportCSV(@QueryParam("text") String text,
+			@QueryParam("seleccionados") String selectedList) throws Exception {
 
-		List<SHPRBean> listaBean = beanService.searchBByQuery(text, Arrays.asList(selectedList.split(",")));
+		
+		
+		List<SIVEPDatoBean> listaBean = beanService.busquedaBeanSeleccionados(text, Arrays.asList(selectedList.split(",")));
 
 		ResponseBuilder response = getCSVExport(listaBean);
-		
+
 		return response.build();
 
 	}
+
+	/**
+	 * Metodo que exporta los registros que han sido seleccionados por el usuario, excluyendo a los registros que han sido deseleccionados.
+	 * @param text
+	 * @param response
+	 * @param deselectedList
+	 * @return
+	 * @throws Exception
+	 */
 	
 	@GET
 	@Path("/deselectedToExportCSV")
 	@Produces("application/csv")
-	public Response deselectedToExportCSV(@QueryParam("text") String text, @QueryParam("desmarcados") String deselectedList) throws Exception {
+	public Response deselectedToExportCSV(@QueryParam("text") String text,
+			@QueryParam("desmarcados") String deselectedList) throws Exception {
 
-		List<SHPRBean> listaBean = beanService.searchWithoutDeselected(text, Arrays.asList(deselectedList.split(",")));
-
-		ResponseBuilder response = getCSVExport(listaBean);
+		List<SIVEPDatoBean> listaBean = beanService.busquedaBeanDeseleccionados(text, Arrays.asList(deselectedList.split(",")));
 		
+		ResponseBuilder response = getCSVExport(listaBean);
+
 		return response.build();
 
 	}
-	
-	
-	
-	
-	
-	private ResponseBuilder getCSVExport(List<SHPRBean> listaBean) throws FileNotFoundException,
+	/**
+	 * Metodo comun para generar el parseo y conversion al csv.
+	 * @param response
+	 * @param listaBean
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 */
+	private ResponseBuilder getCSVExport(List<SIVEPDatoBean> listaBean) throws FileNotFoundException,
 			UnsupportedEncodingException, IOException, JsonGenerationException, JsonMappingException {
 		// create mapper and schema
 		CsvMapper mapper = new CsvMapper();
@@ -117,9 +160,9 @@ public class ElasticServiceRest {
 
 		FileOutputStream tempFileOutputStream = new FileOutputStream(tempFile);
 		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(tempFileOutputStream, 1024);
-        OutputStreamWriter writerOutputStream = new OutputStreamWriter(bufferedOutputStream, "UTF-8");
-        myObjectWriter.writeValue(writerOutputStream, listaBean);
-		
+		OutputStreamWriter writerOutputStream = new OutputStreamWriter(bufferedOutputStream, "UTF-8");
+		myObjectWriter.writeValue(writerOutputStream, listaBean);
+
 		ResponseBuilder response = Response.ok((Object) tempFile);
 		response.header("Content-Disposition", "attachment; filename=fileSHPRBean.csv");
 		return response;
