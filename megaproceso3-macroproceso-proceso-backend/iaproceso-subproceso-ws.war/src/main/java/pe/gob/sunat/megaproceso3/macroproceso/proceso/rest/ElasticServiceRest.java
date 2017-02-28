@@ -52,7 +52,7 @@ public class ElasticServiceRest {
 	 */
 	
 	@GET
-	@Path("speechBeanList")
+	@Path("sivepBeanBusqueda")
 	@Produces(MediaType.APPLICATION_JSON)
 	public DataResponseWrap sivepBeanBusqueda(@Context HttpServletRequest request, @QueryParam("text") String text,
 			@QueryParam("totalrecords") String totalRecord, @QueryParam("start") Integer start,
@@ -79,7 +79,7 @@ public class ElasticServiceRest {
 	 * @throws Exception
 	 */
 	@GET
-	@Path("/downloadCSV")
+	@Path("/exportarCSV")
 	@Produces("application/csv")
 	public Response downloadCSFile(@QueryParam("text") String text) throws Exception {
 
@@ -101,7 +101,7 @@ public class ElasticServiceRest {
 	 * @throws Exception
 	 */
 	@GET
-	@Path("/selectedToExportCSV")
+	@Path("/exportarSeleccionadosCSV")
 	@Produces("application/csv")
 	public Response selectedToExportCSV(@QueryParam("text") String text,
 			@QueryParam("seleccionados") String selectedList) throws Exception {

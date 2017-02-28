@@ -1,9 +1,7 @@
 include 'iaproceso-subproceso.war',
-		'itproceso-subproceso.war',
 		'macroproceso-proceso-controller.jar',
 		'megaproceso3-macroproceso-proceso.ear'
 
 project(':iaproceso-subproceso.war').name='iaproceso-subproceso'
-project(':itproceso-subproceso.war').name='itproceso-subproceso'
 project(':macroproceso-proceso-controller.jar').name='macroproceso-proceso-controller'
 project(':megaproceso3-macroproceso-proceso.ear').name='megaproceso3-macroproceso-proceso.ear'

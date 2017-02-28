@@ -1,5 +1,5 @@
 connection.arguments=
-connection.gradle.distribution=GRADLE_DISTRIBUTION(LOCAL_INSTALLATION(/Users/josediaz/Tools/gradle-2.12))
+connection.gradle.distribution=GRADLE_DISTRIBUTION(LOCAL_INSTALLATION(D\:\\Tools\\gradle-2.12))
 connection.java.home=null
 connection.jvm.arguments=
 connection.project.dir=..

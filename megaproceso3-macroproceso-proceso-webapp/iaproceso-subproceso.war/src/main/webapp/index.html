@@ -73,20 +73,65 @@
                          
                       </div>
 
-				  	<table id="tableEjemplo" class="table-striped" cellspacing="0" width="100%"><!--table table-striped table-bordered-->
+				  	<table id="sivepList" class="table-striped" cellspacing="0" width="100%"><!--table table-striped table-bordered-->
 				        <thead>
 				             <tr>
 				             	<th><input id="select_all" name="select_all" value="1" type="checkbox"></th>
-				                <th>line_id</th>
-				                <th>play_name</th>
-				                <th>speaker</th>
-				                <th>speech_number</th>
-				                <th>text_entry</th>
-				                <th>line_number</th>
-				                <th>play_name</th>
-				                <th>speaker</th>
-				                <th>speech_number</th>
-				                <th>text_entry</th>
+				                <th>Puerto Embarque</th>
+				                <th>Nro</th>
+				                <th>Canal</th>
+				                <th>SPN</th>
+				                <th>Producto</th>
+				                <th>Marca</th>
+				                <th>Modelo</th>
+				                <th>Caracteristicas</th>
+				                <th>Clase variedad</th>
+				                <th>Material Composicion</th>
+				                <th>Uso Aplicacion</th>
+				                <th>Aro - Año</th>
+				                <th>FOB</th>
+				                <th>FOB - KG</th>
+				                <th>Ajuste</th>
+				                <th>FOB Unitario</th>
+				                <th>Cantidad</th>
+				                <th>Unidad</th>
+				                <th>DAM</th>
+				                <th>Item</th>
+				                <th>Serie</th>
+				                <th>Factura</th>
+				                <th>Importador</th>
+				                <th>Vendedor</th>
+				                <th>Estado</th>
+				                <th>Fec. Fact</th>
+				                <th>Fec. Embar</th>
+				                <th>Pais Origen</th>
+				                <th>Pais Embar.</th>
+				                <th>Otra Descripc.</th>
+								<th>Otra Descr</th>
+				                <th>Otra Descr</th>
+				                <th>Cant. CC</th>
+				                <th>Codigo C</th>
+				                <th>Des Comp2</th>
+				                <th>Cant. Cc</th>
+				                <th>Cod C</th>
+				                <th>Des Comp3</th>
+				                <th>Cant. Cc</th>
+				                <th>Cod A</th>
+				                <th>Espesor</th>
+				                <th>Des. Acab1</th>
+				                <th>Cod. A</th>
+				                <th>Des. Acab2</th>
+				                <th>SPBQ</th>
+				                <th>Cod C.</th>
+				                <th>Des Comp1</th>
+				                <th>Ancho</th>
+				                <th>Grama</th>
+				                <th>FOB Inicial</th>
+				                <th>Nombre BQ</th>
+				                <th>Descripcion BQ</th>
+				                <th>Composicion BQ</th>
+				                <th>Uso BQ</th>
+				                
 				            </tr>
 				        </thead>
 				    </table>
@@ -115,14 +160,13 @@
     var checksDesmarcados = [];
 	
     $(document).ready(function() {   	
-    	var oTable = $('#tableEjemplo').dataTable();
+    	var oTable = $('#sivepList').dataTable({"bFilter": false});
     	var rows_selected = [];
     	var exportButton = $('#btnExport');
     	
 		$('#textName').val("");
 		
 		var datatable2Rest = function(sSource, aoData, fnCallback, oSettings) {
-			
 			
 			var start = oSettings._iDisplayStart;
 			var finish = oSettings._iDisplayLength;
@@ -134,21 +178,18 @@
 			var restParams = new Array();
 			restParams.push({"name" : "start", "value" : start});
 			restParams.push({"name" : "finish", "value" : finish });
-			restParams.push({"name" : "page", "value" : pageNum });
+			restParams.push({"name" : "totalrecords", "value" : oSettings._iRecordsTotal});
 			for ( var i = 0; i < aoData.length; i++) {
 				restParams.push({"name" : aoData[i].name,"value" :  aoData[i].value});
 			}
-			//if we are searching by name, override the url and add the name parameter
 			var url = sSource;
 			
-			//finally, make the request
 			$.ajax({
 				"dataType" : 'json',
 				"type" : "GET",
 				"url" : url,
 				"data" : restParams,
 				"success" : function(data) {
- 				    //alert("Current page number: primero el ServerData");
 					fnCallback(data);
 				}
 			});
@@ -164,18 +205,19 @@
 		    rows_selected = [];
 		    document.getElementById('select_all').checked = false; 
 			
-			$('#tableEjemplo').dataTable( {
+			oTable.dataTable( {
 		           	"bProcessing": true,
 	   		     	"bServerSide": true,
 	   		 		"bDestroy": true,
 	   		 		"bFilter": false,
+	   		 		"bSort":false,
 	   		 		"sEcho":1,
 	   		 		"sScrollY": "500px",
 				    "sScrollX": "100%",
 				    "sScrollXInner": "150%",
 				    "bScrollCollapse": true,
 	   		 		"lengthMenu": [[100, 200, 300, 400], [100, 200, 300, 400]],
-  	                "sAjaxSource": "/cl-at-iaproceso-subproceso-ws/rest/data/speechBeanList",
+  	                "sAjaxSource": "/cl-at-iaproceso-subproceso-ws/rest/data/sivepBeanBusqueda",
   	           		"fnServerParams": function ( aoData ) {
     	             	aoData.push( { "name": "text", "value": textNametoSearch } );
 	    	         },
@@ -184,7 +226,7 @@
     	    	        processing:     "Procesando...",
     	    	        lengthMenu:    "Mostrar _MENU_ registros",
     	    	        info:           "Mostrar _START_ hasta  _END_ en  _TOTAL_ de Registros",
-    	    	        infoEmpty:      "No hay informacion disponnible",
+    	    	        infoEmpty:      "No hay informacion disponible",
     	    	        infoFiltered:   "",
     	    	        infoPostFix:    "",
     	    	        loadingRecords: "Cargando...",
@@ -199,11 +241,9 @@
     	    	    },
     	    	    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
-    	    	    	 var rowId = aData.line_id;
-    	    	    	 var indx = $.inArray(rowId.toString(), rows_selected);
-    	    	    		 
-    	    	         if(indx !== -1 ||  (exportStatus && ($.inArray(rowId, checksDesmarcados)=== -1))){
+    	    	    	 var rowId = aData.NUM_CORRIV;
     	    	        	 
+    	    	         if($.inArray(rowId, rows_selected) !== -1 ||  (exportStatus && ($.inArray(rowId, checksDesmarcados)=== -1))){
     	    	            $(nRow).find('input[type="checkbox"]').prop('checked', true);
     	    	            $(nRow).addClass('selected');
     	    	         }
@@ -212,27 +252,129 @@
 					{
 						    "mData":   "isExport",
 						    render: function ( value, type, row ) {
-						    	return '<input type="checkbox" onclick="almacenarChecks(this);" class="checkbox1" id="'+row.line_id+'"> ';
+						    	return '<input type="checkbox" onclick="almacenarChecks(this);" class="checkbox1" id="'+row.NUM_CORRIV+'"> ';
 						    },
 						    className: "select-checkbox",
 						    orderable: false
 					},
-					{ "mData": "line_id",
+					{ "mData": "DES_PUER_EMBAR" },
+					{ "mData": "NUM_DECLARACION" },
+					{ "mData": "COD_CANAL" },
+					{ "mData": "NUM_PARARANCEL" },
+					{ "mData": "DES_PRODUCBQ" },
+					{ "mData": "DES_MARCA" },
+					{ "mData": "DES_MODELO" },
+					{ "mData": "DES_CARATIPO" },
+					{ "mData": "DES_CLASEVARI" },
+					{ "mData": "DES_MATERIALCOMP" },
+					{ "mData": "DES_USOAPLIC" },
+					{ "mData": "DES_AROANO" },
+					{ "mData": "MTO_FOBITEM" },
+					{ "mData": "MTO_FOBKG" },
+					{ "mData": "MTO_AJUUNITARIO" },
+					{ "mData": "MTO_FOBUNITARIO" },
+					{ "mData": "CNT_UNI" },
+					{ "mData": "COD_UNICOMER" },
+					{ "mData": "DAM",
 						render: function ( value, type, row ) {
-							
-					    	//return row.line_number +"-"+ row.speech_number;
-							return row.line_id;
+					    	return row.NUM_CORRIV + " - "+ row.NUM_CORREDOC+ " - "+  row.COD_ADUANA+ " - "+  row.ANN_PRESEN+ " - "+  row.NUM_DECLARACION+ " - "+  row.NUM_SECITEM+ " - "+  row.MTO_FOBUNITARIO+ " - "+  row.COD_ESTVAL+ " - "+  row.COD_NATUTRANS;
 					    }
 					},
-					{ "mData": "play_name" },
-					{ "mData": "speaker" },
-					{ "mData": "speech_number" },
-					{ "mData": "text_entry" },
-					{ "mData": "line_number" },
-					{ "mData": "play_name" },
-					{ "mData": "speaker" },
-					{ "mData": "speech_number" },
-					{ "mData": "text_entry" }
+					{ "mData": "NUM_SECITEM" },
+					{ "mData": "NUM_SERIE" },
+					{ "mData": "NUM_FACT" },
+					{ "mData": "NUM_DOCIMPORT",
+						render: function ( value, type, row ) {
+					    	return row.NUM_DOCIMPORT + " - "+ row.NOM_IMPORT;
+					    }
+					},
+					{ "mData": "NOM_PROVE" },
+					{ "mData": "COD_ESTMERC" },
+					{ "mData": "FEC_FACT" },
+					{ "mData": "FEC_EMBARQUE" },
+					{ "mData": "COD_PAISORIGEN" },
+					{ "mData": "COD_PAISEMBARQUE" },
+					{ "mData": "DES_COM1" },
+			        { "mData": "DES_COM2" },
+			        { "mData": "DES_COM3" },
+			        { "mData": "CNT_COMPOSICION1" },
+		            { "mData": "COD_COMPOSICION2" },
+		            { "mData": "DES_COMPOSICION2" },
+		            { "mData": "CNT_COMPOSICION2" },
+		            { "mData": "COD_COMPOSICION3" },
+		            { "mData": "DES_COMPOSICION3" },
+		            { "mData": "CNT_COMPOSICION3" },
+		            { "mData": "COD_ACABADO1" },
+		            { "mData": "NUM_ESPESOR" },
+		            { "mData": "DES_ACABADO1" },
+		            { "mData": "COD_ACABADO2" },
+		            { "mData": "DES_ACABADO2" },
+		            { "mData": "NUM_PARBQ" },
+		            { "mData": "COD_CRITERIO" },
+		            { "mData": "DES_COM1" },
+		            { "mData": "NUM_ANCHO" },
+		            { "mData": "NUM_GRAMAJE" }, 
+		            { "mData": "MTO_FOBDECINI" },
+		            { "mData": "NUM_BQ" },
+		            { "mData": "DES_COMPBQ" },
+		            { "mData": "DES_COMPBQ" },
+		            { "mData": "DES_USOBQ" }
+		            
+		            
+					
+// 					{ "mData": "NUM_CORRIV" },
+// 		            { "mData": "NUM_CORREDOC" },
+// 		            { "mData": "COD_ADUANA" },
+// 		            { "mData": "ANN_PRESEN" },
+// 		            { "mData": "COD_REGIMEN" },
+// 		            { "mData": "COD_MODALIDAD" },
+// 		            { "mData": "FEC_DECLARACION" },
+// 		            { "mData": "COD_TIPDOCIMPORT" },
+// 		            { "mData": "IND_CONCLU" },
+// 		            { "mData": "FEC_CONCLU" },
+// 		            { "mData": "IND_IMPFREC" },
+// 		            { "mData": "IND_GARANTIA" },
+// 		            { "mData": "IND_GARANTIACONC" },
+// 		            { "mData": "NUM_GARANTIA" },
+// 		            { "mData": "COD_TIPOLIQUIDA" },
+// 		            { "mData": "COD_ESTDR" },
+// 		            { "mData": "COD_ORIGEN" },
+// 		            { "mData": "COD_PUER_EMBAR" },
+// 		            { "mData": "NUM_DOCTRANSP" },
+// 		            { "mData": "COD_TIPOESTMERC" },
+// 		            { "mData": "COD_PAISADQUI" },
+// 		            { "mData": "MTO_FOBPROVIS" },
+// 		            { "mData": "COD_TIPOVALFOB" },
+// 		            { "mData": "IND_SENSIBLE" },
+// 		            { "mData": "DES_COMER" },
+// 		            { "mData": "OBS_OBS" },
+// 		            { "mData": "COD_TIPDESCRMIN" }
+// 		            { "mData": "IND_DESCRMIN" },
+// 		            { "mData": "DES_BUSQUEDA" },
+// 		            { "mData": "NUM_SECFACT" },
+// 		            { "mData": "NUM_SECPROVE" },
+// 		            { "mData": "COD_PAISPROVE" },
+// 		            { "mData": "COD_NIVCOM" },
+// 		            { "mData": "COD_CONDPROVE" },
+// 		            { "mData": "COD_NATUTRANS" },
+// 		            { "mData": "IND_VINCULADO" },
+// 		            { "mData": "MTO_FOBDR" },
+// 		            { "mData": "MTO_FOBCP" },
+// 		            { "mData": "MTO_FOBDDR" },
+// 		            { "mData": "IND_BQ" },
+// 		            { "mData": "DES_INFORMBQ" },
+// 		            { "mData": "COD_ADUANABQ" },
+// 		            { "mData": "ANN_BQ" },
+// 		            { "mData": "IND_BQCOM" },
+// 		            { "mData": "NUM_SECVALORACT" },
+// 		            { "mData": "COD_ESTVAL" },
+// 		            { "mData": "FEC_GENVAL" },
+// 		            { "mData": "COD_CRITERIO" },
+// 		            { "mData": "COD_FUNCVAL" },
+// 		            { "mData": "NOM_FUNCVAL" },
+// 		            { "mData": "FEC_CARGASIS" },
+// 		            { "mData": "IND_DEL" },
+// 		            
 				]
   	        });
 				
@@ -240,9 +382,7 @@
 
 
 		// Handle click on checkbox
-		   $('#tableEjemplo tbody').on('click', 'input[type="checkbox"]', function(e){
-
-
+		   $('#sivepList tbody').on('click', 'input[type="checkbox"]', function(e){
 		      var $row = $(this).closest('tr');
 
 		      // Get row ID
@@ -279,13 +419,11 @@
 		   });
 
 		   // Handle click on "Select all" control
-		   $('#tableEjemplo thead input[name="select_all"]').on('click', function(e){
-			   
-			   
+		   $('#sivepList thead input[name="select_all"]').on('click', function(e){
 		      if(this.checked){
-		         $('#tableEjemplo tbody input[type="checkbox"]:not(:checked)').trigger('click');
+		         $('#sivepList tbody input[type="checkbox"]:not(:checked)').trigger('click');
 		      } else {
-		         $('#tableEjemplo tbody input[type="checkbox"]:checked').trigger('click');
+		         $('#sivepList tbody input[type="checkbox"]:checked').trigger('click');
 		      }
 
 		      // Prevent click event from propagating to parent
@@ -298,39 +436,20 @@
 		      updateDataTableSelectAllCtrl(oTable);
 		   });
 		    
-		   // Handle form submission event 
-		   $('#frm-tableEjemplo').on('submit', function(e){
-		      var form = this;
-
-		      // Iterate over all selected checkboxes
-		      $.each(rows_selected, function(index, rowId){
-		         // Create a hidden element 
-		         $(form).append(
-		             $('<input>')
-		                .attr('type', 'hidden')
-		                .attr('name', 'id[]')
-		                .val(rowId)
-		         );
-		      });
-
-		   });
-		   
 		   $('#btnExport').click(function() {
-
 			   var textNametoSearch = $('#textName').val();
 			   var selectall = $("#select_all")[0];
 			   if (textNametoSearch!=null){
 				   if ( selectall.checked && !selectall.indeterminate ){
-					   
-					   window.location.href = "/cl-at-iaproceso-subproceso-ws/rest/data/downloadCSV?text="+textNametoSearch;
+					   window.location.href = "/cl-at-iaproceso-subproceso-ws/rest/data/exportarCSV?text="+textNametoSearch;
 				   }
 				   else {
 					   if(exportStatus){
 						   //exportar todos menos los excluidos
-						   window.location.href = "/cl-at-iaproceso-subproceso-ws/rest/data/deselectedToExportCSV?text="+textNametoSearch+"&desmarcados="+checksDesmarcados;
+						   window.location.href = "/cl-at-iaproceso-subproceso-ws/rest/data/exportarDeseleccionadosCSV?text="+textNametoSearch+"&desmarcados="+checksDesmarcados;
 					   } else {
 						   //exportar solo los seleccionados
-						   window.location.href = "/cl-at-iaproceso-subproceso-ws/rest/data/selectedToExportCSV?text="+textNametoSearch+"&seleccionados="+checksSeleccionados;
+						   window.location.href = "/cl-at-iaproceso-subproceso-ws/rest/data/exportarSeleccionadosCSV?text="+textNametoSearch+"&seleccionados="+checksSeleccionados;
 					   }
 				   }
 			   }
@@ -381,7 +500,6 @@
 	 }
  
  	function almacenarChecks(element){
-
  		 var indexs = $.inArray(element.id, checksSeleccionados);
  		 var indexd = $.inArray(element.id, checksDesmarcados);
  		
@@ -403,5 +521,3 @@
   </body>
 </html>
 
-	
-	
