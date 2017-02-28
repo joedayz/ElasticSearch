@@ -20,7 +20,7 @@ public class DataResponseWrap implements Serializable{
 	private long iTotalDisplayRecords = 0L;
 	
 	@XmlElement
-	private List<SHPRBean> aaData;
+	private List<? extends Object> aaData;
 	
 	@XmlElement(nillable = true)
 	private String iColumns;
@@ -32,26 +32,22 @@ public class DataResponseWrap implements Serializable{
 	private String iDisplayLength;
 	
 
-	public DataResponseWrap() {
-		
-	}
+
 	
-	public DataResponseWrap(HttpServletRequest request, List<SHPRBean> lista, Long size) {
-		
-		
+	public DataResponseWrap(HttpServletRequest request, List<? extends Object> lista, Long size) {
 		this.sEcho = request.getParameter("sEcho");
 		this.iTotalRecords = size;
 		this.iTotalDisplayRecords = size;
 		this.iDisplayLength = request.getParameter("iDisplayLength");
 		this.aaData = lista;
-		
 	}
 	
-	public DataResponseWrap(HttpServletRequest request, List<SHPRBean> list) {
+	public DataResponseWrap(HttpServletRequest request, List<? extends Object> list) {
 		this(request, list.size(), list.size(), list);
 	}
 
-	public DataResponseWrap(HttpServletRequest request, long iTotalRecords, long iTotalDisplayRecords, List<SHPRBean> aaData) {
+	public DataResponseWrap(HttpServletRequest request, long iTotalRecords, long iTotalDisplayRecords,
+					List<? extends Object> aaData) {
 		
 		String sEcho = request.getParameter("sEcho");
 		
@@ -94,7 +90,7 @@ public class DataResponseWrap implements Serializable{
 		return this.aaData;
 	}
 
-	public void setAaData(List<SHPRBean> aaData) {
+	public void setAaData(List<? extends Object> aaData) {
 		this.aaData = aaData;
 	}
 	/**
