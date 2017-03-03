@@ -30,7 +30,7 @@ public class RegistroPaginadoServiceImpl implements RegistroPaginadoService {
 	private static final String FILTER_NAME = "NUM_CORRIV";
 
 	private QueryBuilder getQueryBuilder(String text) {
-		QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("*" + text + "*");
+		QueryBuilder queryBuilder = QueryBuilders.queryStringQuery(text);
 		return queryBuilder;
 	}
 	
